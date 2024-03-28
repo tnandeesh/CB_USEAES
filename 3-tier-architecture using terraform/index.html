@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a 3-Tier Architecture on AWS</title>
+
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        header {
+            max-width: 1500px;
+            color: #fff;
+            padding: 20px;
+            background-color: #6495ED;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center content horizontally */
+        }
+
+        section {
+            max-width: 1150px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #050505;
+
+        }
+        pre {
+            font-family: 'Arial', monospace;
+            background-color: #f8f8f8;
+            padding: 10px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+        }
+
+        p {
+            color: #0e0e0e;
+        }
+
+        ol {
+            color: #111010;
+            padding-left: 20px;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        body {
+                                font-family: Arial, sans-serif;
+                                margin: 20px;
+                            }
+                    
+                            li {
+                                margin-bottom: 10px;
+                            }
+                    
+                            .free-tier {
+                                background-color: #f0f8ff;
+                                padding: 10px;
+                                border-radius: 5px;
+                            }       
+    </style>
+
+
+</head>
+<body>
+
+  <header>
+    <h1 id="Deploy_Docker_Containers" class="lb-txt-none lb-txt-white lb-none-v-margin lb-h1 lb-title" style="margin-top: 10px; margin-bottom: 5px;">3-Tier Architecture</h1>   
+  </header>
+  <h1 id="on_Amazon_Elastic_Container_Service_.28Amazon_ECS.29" class="lb-txt-none lb-txt-white lb-none-v-margin lb-h2 lb-title" style="margin-top: 5px; margin-bottom: 5px; color: rgb(5, 5, 5); font-size: 14px; text-align: center;">Creating a three-tier architecture on AWS involves setting up three layers: a Web layer, an Application layer, and a Database layer. This structure separates the concerns, making the system more organized and easier to manage.</h1>
+
+    <img src="AWS_3Tier_Architecture - Project_3Tier (1).jpeg" alt="AWS_3Tier_Architecture - Project_3Tier (1).jpeg" width="1000" height="800" style="display: block; margin-left: auto; margin-right: auto;">
+  
+
+    <h1 style="text-align: center;">3-Tier Architecture Tutorial</h1>
+
+    <img src="3-Tier.webp" alt="3-Tier.webp" width="650" height="400" style="display: block; margin-left: auto; margin-right: auto;">
+
+<section>
+<div class="container">
+  <div class="tier">
+    <h2>Web/Presentation Tier</h2>
+    <p>It is also known as the user interface tier, which is responsible for interacting with users and displaying information in a user-friendly manner. Its primary goal is to provide an intuitive and user-friendly interface for users to interact with the application.</p>
+  </div>
+  <div class="tier">
+    <h2>Application Logic Tier</h2>
+    <p>This layer acts as a bridge between the presentation tier and the data storage tier, ensuring that the application functions correctly. It encapsulates the business logic and ensures the proper functioning of the application.</p>
+  </div>
+  <div class="tier">
+    <h2>Database Tier</h2>
+    <p>This layer abstracts the underlying data storage details from the other tiers, allowing them to interact with the data without needing to know the specific implementation details. Its primary responsibility is to manage the storage and retrieval of data required by the application.</p>
+  </div>
+</div>
+</section>
+
+
+<h1 style="text-align: center;">Here’s a simplified tutorial</h1>
+
+    
+
+    <section>
+        <h1>Prerequisites</h1>
+        <ul>
+            <li>AWS account</li>
+            <li>Basic knowledge of AWS services like EC2, RDS, and VPC</li>
+            <li>Terraform knowledge</li>
+        </ul>
+    </section>
+
+    <section id="step1">
+      <h1>Step 1: Web Layer</h1>
+
+      <h2>a. Route 53:</h2>
+      <p>1. Go to the <a href="https://console.aws.amazon.com/route53/" target="_blank">Route 53 console</a>.</p>
+      <p>2. Create a hosted zone for your domain.</p>
+      <p>3. Add records to route traffic to CloudFront.</p>
+      <hr class="lb-divider">
+      <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+          <div class="lb-col lb-tiny-24 lb-mid-16">
+              <div class="lb-txt-16 lb-rtxt">
+                  <!-- Your content goes here -->
+              </div>
+          </div>
+      </div>
+  
+      <h2>b. CloudFront:</h2>
+      <p>1. Go to the <a href="https://console.aws.amazon.com/cloudfront/" target="_blank">CloudFront console</a>.</p>
+      <p>2. Create a new distribution.</p>
+      <p>3. Configure the origin to point to your S3 bucket.</p>
+      <hr class="lb-divider">
+      <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+          <div class="lb-col lb-tiny-24 lb-mid-16">
+              <div class="lb-txt-16 lb-rtxt">
+                  <!-- Your content goes here -->
+              </div>
+          </div>
+      </div>
+  
+      <h2>c. Amazon S3:</h2>
+      <p>1. Go to the <a href="https://console.aws.amazon.com/s3/" target="_blank">S3 console</a>.</p>
+      <p>2. Create an S3 bucket to host your static content.</p>
+      <p>3. Upload your static content (HTML, CSS, images) to the S3 bucket.</p>
+      <hr class="lb-divider">
+      <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+          <div class="lb-col lb-tiny-24 lb-mid-16">
+              <div class="lb-txt-16 lb-rtxt">
+                  <!-- Your content goes here -->
+              </div>
+          </div>
+      </div>
+      
+        <h2>d. Elastic Load Balancer (ELB):</h2>
+    <p>1. Go to the <a href="https://console.aws.amazon.com/ec2/" target="_blank">EC2 console</a>.</p>
+    <p>2. Create an Application Load Balancer.</p>
+    <p>3. Configure listeners and target groups.</p>
+    <hr class="lb-divider">
+    <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+        <div class="lb-col lb-tiny-24 lb-mid-16">
+            <div class="lb-txt-16 lb-rtxt">
+                <!-- Your content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <h2>e. Auto Scaling (Web Servers):</h2>
+    <p>1. Go to the <a href="https://console.aws.amazon.com/ec2/autoscaling/" target="_blank">Auto Scaling console</a>.</p>
+    <p>2. Create a launch configuration specifying your EC2 instance details.</p>
+    <p>3. Set up an Auto Scaling Group using the launch configuration.</p>
+    <p>4. Configure scaling policies based on metrics like CPU utilization.</p>
+    <hr class="lb-divider">
+    <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+        <div class="lb-col lb-tiny-24 lb-mid-16">
+            <div class="lb-txt-16 lb-rtxt">
+                <!-- Your content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <h2>f. EC2 Instances (Web Servers):</h2>
+    <p>1. Launch EC2 instances in your public subnet.</p>
+    <p>2. Configure instances with necessary software for the web server.</p>
+    <p>3. Ensure instances are part of the target group associated with the ELB.</p>
+
+    </section>
+
+    <section id="step2">
+      <h1>Step 2: Application Layer</h1>
+
+      <h2>a. Auto Scaling (Application Servers):</h2>
+      <p>1. Repeat the same process as for the web servers, but this time for application servers.</p>
+      <p>2. Create a launch configuration and Auto Scaling Group.</p>
+      <hr class="lb-divider">
+      <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+          <div class="lb-col lb-tiny-24 lb-mid-16">
+              <div class="lb-txt-16 lb-rtxt">
+                  <!-- Your content goes here -->
+              </div>
+          </div>
+      </div>
+  
+      <h2>b. EC2 Instances (Application Servers):</h2>
+      <p>1. Launch EC2 instances in your public subnet.</p>
+      <p>2. Configure instances with the necessary application software.</p>
+      <p>3. Ensure instances are part of the target group associated with the ELB.</p>
+    </section>
+
+      <section id="step3">
+  <h1>Step 3: Database Layer</h1>
+  
+      <h2>a. Amazon RDS:</h2>
+      <p>1. Go to the <a href="https://console.aws.amazon.com/rds/" target="_blank">RDS console</a>.</p>
+      <p>2. Create an RDS instance for your database.</p>
+      <p>3. Choose the database engine, set up the master username, password, etc.</p>
+      <p>4. Place the RDS instance in a private subnet for added security.</p>
+      <hr class="lb-divider">
+      <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+          <div class="lb-col lb-tiny-24 lb-mid-16">
+              <div class="lb-txt-16 lb-rtxt">
+                  <!-- Your content goes here -->
+              </div>
+          </div>
+      </div>
+  
+      <h2>b. Security Groups and Network ACLs:</h2>
+      <p>1. Go to the <a href="https://console.aws.amazon.com/vpc/" target="_blank">VPC console</a>.</p>
+      <p>2. Configure security groups for the web, application, and database layers.</p>
+      <p>3. Set up Network ACLs to control traffic at the subnet level.</p>
+    </section>
+
+    <section id="step4">
+  <h1>Step 4: Testing Your Setup</h1>
+  
+      <h2>a. Access Web Server:</h2>
+      <p>1. Access your web server through its public IP address or <a href="#" target="_blank">domain name</a>.</p>
+      <p>2. Verify that the static content is being served through CloudFront.</p>
+      <hr class="lb-divider">
+      <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+          <div class="lb-col lb-tiny-24 lb-mid-16">
+              <div class="lb-txt-16 lb-rtxt">
+                  <!-- Your content goes here -->
+              </div>
+          </div>
+      </div>
+  
+      <h2>b. Check Connectivity:</h2>
+      <p>1. Verify connectivity between the layers.</p>
+      <p>2. Test the application layer's ability to connect to the database layer.</p>
+    </section>
+
+      <section id="step5">
+      <h1>Step 5: Monitoring and Management</h1>
+  
+      <h2>a. Amazon CloudWatch:</h2>
+      <p>1. Go to the <a href="https://console.aws.amazon.com/cloudwatch/" target="_blank">CloudWatch console</a>.</p>
+      <p>2. Set up CloudWatch Alarms for key metrics.</p>
+      <p>3. Monitor the health and performance of instances and the database.</p>
+</section>
+
+  <section id="step6">
+      <h1>Step 6: Backup and Recovery</h1>
+  
+      <h2>a. Amazon RDS Automated Backups:</h2>
+      <p>1. Go to the <a href="https://console.aws.amazon.com/rds/" target="_blank">RDS console</a>.</p>
+      <p>2. Configure automated backups for your RDS instance.</p>
+      <p>3. Set up retention policies for backups.</p>
+      <hr class="lb-divider">
+      <div class="lb-mid-pad lb-none-v-margin lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 2px; padding-bottom: 0px;">
+          <div class="lb-col lb-tiny-24 lb-mid-16">
+              <div class="lb-txt-16 lb-rtxt">
+                  <!-- Your content goes here -->
+              </div>
+          </div>
+      </div>
+  
+      <h2>b. Amazon S3 for Backups:</h2>
+      <p>1. Store backups of your application data or configurations in <a href="https://console.aws.amazon.com/s3/" target="_blank">Amazon S3</a>.</p>
+  
+    </section>
+
+
+    <section>
+        <h1>3-Tier Architecture Code</h1>
+        <p>Creating a 3-tier architecture on AWS using Terraform requires a good understanding of AWS services and Terraform itself. Below is a simplified example of how you might structure your Terraform configuration files to create a 3-tier architecture on AWS. In this example, we’ll use EC2 instances for the web and application layers, and an RDS instance for the database layer.
+        </p>
+    </section>
+
+    <section>
+         <pre>
+
+            # Main Configuration File: main.tf
+         </pre>
+
+
+
+    <pre>
+      # Versions 
+      terraform {
+        required_providers {
+          aws = {
+            source  = "hashicorp/aws"
+            version = "4.40.0"
+          }
+        }
+      }
+      
+      # Authentication to AWS from Terraform code
+      provider "aws" {
+        region  = "us-east-1"
+        profile = "default"
+      }
+      
+      terraform {
+        backend "s3" {
+          bucket = "3tier-arch"
+          key    = "repalce with your bucket"
+          region = "us-east-1"
+        }
+      }
+      
+      # VPC 
+      resource "aws_vpc" "threetier_vpc" {
+        cidr_block           = var.cidr_block
+        instance_tenancy     = var.instance_tenancy
+        enable_dns_support   = var.enable_dns_support
+        enable_dns_hostnames = var.enable_dns_hostnames
+      
+        tags = {
+          Name       = "threetier_vpc"
+          Created_By = "Terraform"
+        }
+      }
+      
+      # Subnet
+      resource "aws_subnet" "websubnet1" {
+        vpc_id            = aws_vpc.threetier_vpc.id
+        cidr_block        = "10.0.1.0/28"
+        availability_zone = "us-east-1a"
+      
+        tags = {
+          Name       = "websubnet1"
+          created_by = "Terraform"
+        }
+      }
+      resource "aws_subnet" "websubnet2" {
+        vpc_id            = aws_vpc.threetier_vpc.id
+        cidr_block        = "10.0.2.0/28"
+        availability_zone = "us-east-1b"
+      
+        tags = {
+          Name       = "websubnet2"
+          created_by = "Terraform"
+        }
+      }
+      
+      # Private 
+      resource "aws_subnet" "appsubnet1" {
+        vpc_id            = aws_vpc.threetier_vpc.id
+        cidr_block        = "10.0.3.0/28"
+        availability_zone = "us-east-1a"
+      
+        tags = {
+          Name       = "appsubnet1"
+          created_by = "Terraform"
+        }
+      }
+      resource "aws_subnet" "appsubnet2" {
+        vpc_id            = aws_vpc.threetier_vpc.id
+        cidr_block        = "10.0.4.0/28"
+        availability_zone = "us-east-1b"
+      
+        tags = {
+          Name       = "appsubnet2"
+          created_by = "Terraform"
+        }
+      }
+      resource "aws_subnet" "dbsubnet1" {
+        vpc_id            = aws_vpc.threetier_vpc.id
+        cidr_block        = "10.0.5.0/28"
+        availability_zone = "us-east-1a"
+      
+        tags = {
+          Name       = "dbsubnet1"
+          created_by = "Terraform"
+        }
+      }
+      resource "aws_subnet" "dbsubnet2" {
+        vpc_id            = aws_vpc.threetier_vpc.id
+        cidr_block        = "10.0.6.0/28"
+        availability_zone = "us-east-1b"
+      
+        tags = {
+          Name       = "dbsubnet2"
+          created_by = "Terraform"
+        }
+      }
+      resource "aws_subnet" "publicsubnet1" {
+        vpc_id                  = aws_vpc.threetier_vpc.id
+        cidr_block              = "10.0.7.0/28"
+        map_public_ip_on_launch = true
+        availability_zone       = "us-east-1a"
+      
+      
+        tags = {
+          Name       = "publicsubnet1"
+          created_by = "Terraform"
+        }
+      }
+      
+      
+      resource "aws_subnet" "publicsubnet2" {
+        vpc_id                  = aws_vpc.threetier_vpc.id
+        cidr_block              = "10.0.8.0/28"
+        map_public_ip_on_launch = true
+        availability_zone       = "us-east-1b"
+      
+        tags = {
+          Name       = "publicsubnet2"
+          created_by = "Terraform"
+        }
+      }
+      
+      # Internet gateway for our VPC:
+      
+      resource "aws_internet_gateway" "igw" {
+        vpc_id = aws_vpc.threetier_vpc.id
+      
+        tags = {
+          Name = "Internet Gateway"
+        }
+      }
+      
+      
+      # Create Public Route Table
+      
+      resource "aws_route_table" "public_rt_table" {
+        vpc_id = aws_vpc.threetier_vpc.id
+      
+        route {
+          cidr_block = "0.0.0.0/0"
+          gateway_id = aws_internet_gateway.igw.id
+        }
+      
+        tags = {
+          Name = "public-rtb"
+        }
+      
+      }
+      
+      # Public Route Table Associations:
+      
+      resource "aws_route_table_association" "psb1-association" {
+        subnet_id      = aws_subnet.publicsubnet1.id
+        route_table_id = aws_route_table.public_rt_table.id
+      }
+      
+      resource "aws_route_table_association" "psb2-association" {
+        subnet_id      = aws_subnet.publicsubnet2.id
+        route_table_id = aws_route_table.public_rt_table.id
+      }
+      
+      
+      
+      # NAT Gateway
+      
+      resource "aws_nat_gateway" "ngw" {
+        allocation_id = aws_eip.elastic_ip.id
+        subnet_id     = aws_subnet.publicsubnet1.id
+        depends_on    = [aws_eip.elastic_ip]
+      
+        tags = {
+          Name = "NAT Gateway"
+        }
+      
+      }
+      
+      # Elastic IP:
+      
+      resource "aws_eip" "elastic_ip" {
+        vpc = true
+      
+        tags = {
+          Name = "Elastic IP"
+        }
+      
+      }
+      
+      # Private Routing Tables:
+      
+      resource "aws_route_table" "private_rt_table" {
+        vpc_id = aws_vpc.threetier_vpc.id
+      
+        route {
+          cidr_block = "0.0.0.0/0"
+          gateway_id = aws_nat_gateway.ngw.id
+        }
+      
+        tags = {
+          Name = "private-rtb"
+        }
+      }
+      
+      # Private Route Table Associations:
+      
+      resource "aws_route_table_association" "asb1-association" {
+        subnet_id      = aws_subnet.appsubnet1.id
+        route_table_id = aws_route_table.private_rt_table.id
+      }
+      
+      resource "aws_route_table_association" "asb2-association" {
+        subnet_id      = aws_subnet.appsubnet2.id
+        route_table_id = aws_route_table.private_rt_table.id
+      }
+      
+      resource "aws_route_table_association" "wsb1-association" {
+        subnet_id      = aws_subnet.websubnet1.id
+        route_table_id = aws_route_table.private_rt_table.id
+      }
+      
+      resource "aws_route_table_association" "wsb2-association" {
+        subnet_id      = aws_subnet.websubnet2.id
+        route_table_id = aws_route_table.private_rt_table.id
+      }
+      
+      resource "aws_route_table_association" "dbs1-association" {
+        subnet_id      = aws_subnet.dbsubnet1.id
+        route_table_id = aws_route_table.private_rt_table.id
+      }
+      
+      resource "aws_route_table_association" "dbs2-association" {
+        subnet_id      = aws_subnet.dbsubnet2.id
+        route_table_id = aws_route_table.private_rt_table.id
+      }
+      
+      
+      
+      # EC2 Instance for Public Subnets (AutoScaling Yet to be Added....)
+      
+      resource "aws_instance" "linux-bastion-host" {
+        ami                    = var.ami
+        instance_type          = var.instance_type
+        key_name               = var.key_name
+        subnet_id              = aws_subnet.publicsubnet1.id
+        vpc_security_group_ids = [ aws_security_group.ec2-sgroup.id ]
+        iam_instance_profile   = var.iam_instance_profile
+        tags = {
+          Name      = "Linux-bastion"
+          CreatedBy = "Terraform"
+        }
+      }
+      
+      # EC2 Instance for Private Subnets (AutoScaling Yet to be Added....)
+      
+      resource "aws_instance" "Application-Server" {
+        ami                    = var.ami
+        instance_type          = var.instance_type
+        key_name               = var.key_name
+        subnet_id              = aws_subnet.appsubnet1.id
+        vpc_security_group_ids = [ aws_security_group.ec2-sgroup.id ]
+        iam_instance_profile   = var.iam_instance_profile
+        tags = {
+          Name      = "App Server 1"
+          CreatedBy = "Terraform"
+        }
+      }
+      
+      
+      resource "aws_instance" "WebServer" {
+        ami                    = var.ami
+        instance_type          = var.instance_type
+        key_name               = var.key_name
+        subnet_id              = aws_subnet.websubnet1.id
+        vpc_security_group_ids = [ aws_security_group.ec2-sgroup.id ]
+        iam_instance_profile   = var.iam_instance_profile
+        tags = {
+          Name      = "Webserver 1"
+          CreatedBy = "Terraform"
+        }
+      }
+      
+      resource "aws_instance" "Database-Server" {
+        ami                    = var.ami
+        instance_type          = var.instance_type
+        key_name               = var.key_name
+        subnet_id              = aws_subnet.dbsubnet1.id
+        vpc_security_group_ids = [ aws_security_group.ec2-sgroup.id ]
+        iam_instance_profile   = var.iam_instance_profile
+        tags = {
+          Name      = "Database Server 1"
+          CreatedBy = "Terraform"
+        }
+      }
+      
+      # Security Group for the VPC:
+      
+      resource "aws_security_group" "ec2-sgroup" {
+        name        = "EC2 Security group"
+        description = "Security Group for all the EC2 Instances"
+        vpc_id = aws_vpc.threetier_vpc.id
+      
+        ingress {
+          from_port   = 22
+          to_port     = 22
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]  # Allow SSH from any IP address
+        }
+      
+        ingress {
+          from_port   = 3389
+          to_port     = 3389
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]  # Allow RDP from any IP address
+        }
+      
+        ingress {
+          from_port   = 80
+          to_port     = 80
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]  # Allow HTTP from any IP address
+        }
+      
+        ingress {
+          from_port   = 443
+          to_port     = 443
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]  # Allow HTTPS from any IP address
+        }
+      
+        egress {
+          from_port   = 0
+          to_port     = 0
+          protocol    = "-1"
+          cidr_blocks = ["0.0.0.0/0"] # Allow all Outbound Traffic
+        }
+      }
+    </pre>
+  </section>
+
+  <div class="lb-transition-wrapper lb-transition-fade-in lb-active" data-lb-comp="transition-wrapper" data-lb-comp-registered="true">
+    <div class="lb-none-pad lb-grid lb-row lb-row-max-large lb-snap" style="display: flex; align-items: center;">
+        <div class="lb-col lb-tiny-24 lb-mid-24">
+            <div class="lb-bg-left-top-cover lb-border-p lb-small-pad lb-box" style="padding-left: 20px; padding-bottom: 0px; background-image: url('https://s3.cn-north-1.amazonaws.com.cn/aws-dam-prod/tmt/template/GSRC_Tutorials_Congratulations.08882b89ba8adfe231cdb223e7ccfb462038399f.png');">
+                <h1 id="Congratulations.21" class="lb-tiny-align-center lb-small-align-center lb-mid-align-center lb-large-align-center lb-xlarge-align-center lb-txt-none lb-txt-white lb-h1 lb-title"> Congratulations!</h1>
+                <div class="lb-grid lb-row lb-row-max-large lb-snap" style="padding-top: 0px; margin-top: 0px;">
+                    <div class="lb-col lb-tiny-24 lb-mid-6">
+                    </div>
+                    <div class="lb-col lb-tiny-24 lb-mid-12" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <div class="lb-tiny-align-center lb-small-align-center lb-mid-align-center lb-large-align-center lb-txt-16 lb-rtxt" style="color: #FFFFFF; margin-top: 0px;">
+                            <p style="color: #FFFFFF;">
+                              Congratulations to the AWS 3-Tier architecture for reaching this milestone! Your dedication to refining infrastructure and enhancing collaboration is truly commendable. Here's to continued success and efficiency in your cloud journey!</p>
+                        </div>
+                    </div>                    
+                    <div class="lb-col lb-tiny-24 lb-mid-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
