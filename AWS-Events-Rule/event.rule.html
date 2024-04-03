@@ -302,80 +302,81 @@ dd {
       </ul>
 
 
-        <h1>Create a cross-Region rule</h1>
-        <h1>JSON</h1>
-        <pre>
-            <code>
-    {
-         "Resources": {
-            "EventRuleRegion1": {
-               "Type": "AWS::Events::Rule",
-               "Properties": {
-                  "Description": "Routes to us-east-1 event bus",
-                  "EventBusName": "MyBusName",
-                  "State": "ENABLED",
-                  "EventPattern": {
-                     "source": [
-                         "MyTestApp"
-                     ],
-                     "detail": [
-                         "MyTestAppDetail"
-                     ]
-                  },
-                  "Targets": [
-                     {
-                         "Arn": "arn:aws:events:us-east-1:123456789012:event-bus/CrossRegionDestinationBus",
-                         "Id": " CrossRegionDestinationBus",
-                         "RoleArn": {
-                            "Fn::GetAtt": [
-                               "EventBridgeIAMrole",
-                               "Arn"
-                            ]
-                         }
-                     }
-                 ]
+<h1>Create a cross-Region rule</h1>
+<h1>JSON</h1>
+<pre>
+<code>
+{
+  "Resources": {
+    "EventRuleRegion1": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "Description": "Routes to us-east-1 event bus",
+        "EventBusName": "MyBusName",
+        "State": "ENABLED",
+        "EventPattern": {
+          "source": [
+            "MyTestApp"
+          ],
+          "detail": [
+            "MyTestAppDetail"
+          ]
+        },
+        "Targets": [
+          {
+            "Arn": "arn:aws:events:us-east-1:123456789012:event-bus/CrossRegionDestinationBus",
+            "Id": "CrossRegionDestinationBus",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "EventBridgeIAMrole",
+                "Arn"
+              ]
             }
-         },
-         "EventBridgeIAMrole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-               "AssumeRolePolicyDocument": {
-                  "Version": "2012-10-17",
-                  "Statement": [
-                     {
-                        "Effect": "Allow",
-                        "Principal": {
-                           "Service": {
-                              "Fn::Sub": "events.amazonaws.com"
-                           }
-                        },
-                        "Action": "sts:AssumeRole"
-                     }
+          }
+        ]
+      }
+    },
+    "EventBridgeIAMrole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Sub": "events.amazonaws.com"
+                }
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "PutEventsDestinationBus",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "events:PutEvents"
+                  ],
+                  "Resource": [
+                    "arn:aws:events:us-east-1:123456789012:event-bus/CrossRegionDestinationBus"
                   ]
-            },
-            "Path": "/",
-            "Policies": [
-               {
-                  "PolicyName": "PutEventsDestinationBus",
-                  "PolicyDocument": {
-                     "Version": "2012-10-17",
-                     "Statement": [
-                        {
-                           "Effect": "Allow",
-                           "Action": [
-                              "events:PutEvents"
-                           ],
-                           "Resource": [
-                              "arn:aws:events:us-east-1:123456789012:event-bus/CrossRegionDestinationBus"
-                           ]
-                        }
-                     ]
-                  }
-               }
-            ]
-         }
+                }
+              ]
+            }
+          }
+        ]
       }
     }
+  }
+}
 </code>
 </pre>
 
@@ -729,13 +730,4 @@ EventTopicPolicy:
         </div>
     </div>
 </div>
-
-</body>
-</html>
-
-
-
-
-
-
 
